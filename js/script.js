@@ -8,14 +8,16 @@ window.addEventListener("DOMContentLoaded", function () {
   // function for hiddeing all tabs and all active classes
   function hideTabContentsAndActiveClasses() {
     for (let i = 0; i < tabContents.length; i++) {
-      tabContents[i].style.display = "none";
+      tabContents[i].classList.remove("show", "fade");
+      tabContents[i].classList.add("hide");
       tabHeaders[i].classList.remove("tabheader__item_active");
     }
   }
 
   // function for showing current tab and adding active class for current header
   function showTabContentsAndActiveClasses(i = 0) {
-    tabContents[i].style.display = "block";
+    tabContents[i].classList.remove("hide");
+    tabContents[i].classList.add("show", "fade");
     tabHeaders[i].classList.add("tabheader__item_active");
   }
 
