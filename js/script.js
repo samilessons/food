@@ -39,7 +39,7 @@ window.addEventListener("DOMContentLoaded", function () {
   // tabs end
 
   // timer start
-  const endTime = "2025-08-31 05:21:59";
+  const endTime = "2025-12-31 23:59:59";
 
   function getTimeRemaining(endTime) {
     const total = Date.parse(endTime) - Date.parse(new Date());
@@ -89,4 +89,42 @@ window.addEventListener("DOMContentLoaded", function () {
 
   setClock(".timer", endTime);
   // timer end
+
+  // modal start
+  const openModalTriggers = document.querySelectorAll("[data-modal-open]");
+  const closeModalTrigger = document.querySelector("[data-modal-close]");
+  const modal = document.querySelector(".modal");
+
+  if (!modal.matches(".hidden") && !modal.matches(".show")) {
+    modal.classList.add("hidden");
+  }
+
+  openModalTriggers.forEach(trigger => {
+    trigger.addEventListener("click", () => {
+      if (modal.classList.contains("hidden")) {
+        modal.classList.remove("hidden");
+        modal.classList.add("show");
+        document.body.style.overflowY = "hidden";
+      }
+    });
+  });
+
+  function closeModal() {
+    modal.classList.add("hidden");
+    modal.classList.remove("show");
+    document.body.style.overflowY = "auto";
+  }
+
+  closeModalTrigger.addEventListener("click", () => {
+    if (modal.classList.contains("show")) closeModal();
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target && e.target === modal) closeModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === 'Escape' && modal.matches(".show")) closeModal();
+  })
+  // modal end
 }); 
