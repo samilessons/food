@@ -174,42 +174,17 @@ window.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  new MenuCard(
-    "img/tabs/vegy.jpg",
-    "vegy",
-    "Меню \"Фитнес\"",
-    `Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и
-              фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким
-              качеством!`,
-    5.55,
-    ".menu__field .container"
-  ).render();
-
-  new MenuCard(
-    "img/tabs/elite.jpg",
-    "elite",
-    "Меню “Премиум”",
-    `В меню “Премиум” мы используем не только красивый дизайн упаковки, но и
-              качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!`,
-    13.33,
-    ".menu__field .container"
-  ).render();
-
-  new MenuCard(
-    "img/tabs/post.jpg",
-    "post",
-    "Меню \"Постное\"",
-    `Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов
-              животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет
-              тофу и импортных вегетарианских стейков.`,
-    10.42,
-    ".menu__field .container"
-  ).render();
+  getData("http://localhost:9999/menu")
+    .then(data => {
+      data.forEach(item => {
+        new MenuCard(item.coverSrc, item.coverAlt, item.title, item.descr, item.price, ".menu__field .container").render();
+      });
+    });
   // MenuCard end
 
   // forms start
   const forms = document.querySelectorAll("form");
-  forms.forEach(form => postData(form));
+  forms.forEach(form => postWrapperData(form));
 
   const MESSAGES = {
     loading: "Загрузка...",
@@ -217,7 +192,7 @@ window.addEventListener("DOMContentLoaded", function () {
     failure: "Что-то пошло не так... Попробуете снова !"
   };
 
-  function postData(form) {
+  function postWrapperData(form) {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
 
@@ -231,21 +206,25 @@ window.addEventListener("DOMContentLoaded", function () {
       loading.innerHTML = `<img src="icons/spinner.svg"/> <span>${MESSAGES.loading}</span>`;
       form.insertAdjacentElement("beforeend", loading);
 
-      fetch("http://localhost:4200/support/", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json"
-        },
-        body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
-      })
+      const formData = new FormData(e.target);
+      const data = JSON.stringify(Object.fromEntries(formData.entries()));
+      // fetch("http://localhost:4200/support/"
+      postData(
+        "http://localhost:9999/support",
+        data
+      )
         .then(response => {
+          console.log(response);
           if (response.ok) {
             showResponseModal(MESSAGES.success);
           } else {
             showResponseModal(MESSAGES.failure);
           }
         })
-        .catch(e => console.log(e))
+        .catch(e => {
+          console.log(e);
+          showResponseModal(MESSAGES.failure);
+        })
         .finally(() => {
           loading.remove();
           e.target.reset();
@@ -278,4 +257,29 @@ window.addEventListener("DOMContentLoaded", function () {
     }, 2500);
   }
   // forms end
+
+
+  // global functions
+  async function postData(url, data) {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: data
+    });
+
+    // return await res.json();
+    return res;
+  }
+
+  async function getData(url) {
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      throw new Error(`Не удалось получить ${url}, статус - ${res.status}`);
+    }
+
+    return await res.json();
+  }
 }); 
