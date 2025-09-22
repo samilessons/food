@@ -174,9 +174,10 @@ window.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  getData("http://localhost:9999/menu")
+  axios.get("http://localhost:9999/menu")
     .then(data => {
-      data.forEach(item => {
+      console.log(data);
+      data.data.forEach(item => {
         new MenuCard(item.coverSrc, item.coverAlt, item.title, item.descr, item.price, ".menu__field .container").render();
       });
     });
@@ -209,13 +210,14 @@ window.addEventListener("DOMContentLoaded", function () {
       const formData = new FormData(e.target);
       const data = JSON.stringify(Object.fromEntries(formData.entries()));
       // fetch("http://localhost:4200/support/"
-      postData(
-        "http://localhost:9999/support",
-        data
-      )
+      // postData(
+      //   "http://localhost:9999/support",
+      //   data
+      // )
+      axios.post("http://localhost:9999/support", data)
         .then(response => {
           console.log(response);
-          if (response.ok) {
+          if (response.status === 201) {
             showResponseModal(MESSAGES.success);
           } else {
             showResponseModal(MESSAGES.failure);
@@ -228,6 +230,8 @@ window.addEventListener("DOMContentLoaded", function () {
         .finally(() => {
           loading.remove();
           e.target.reset();
+          axios.get("http://localhost:9999/support")
+            .then(data => console.log(data));
         });
     });
   }
