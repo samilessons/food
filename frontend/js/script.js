@@ -231,27 +231,29 @@ window.addEventListener("DOMContentLoaded", function () {
       loading.innerHTML = `<img src="icons/spinner.svg"/> <span>${MESSAGES.loading}</span>`;
       form.insertAdjacentElement("beforeend", loading);
 
-      const formData = new FormData(e.target);
-
-      const request = new XMLHttpRequest();
-      request.open("POST", "http://localhost:4200/support/");
-      request.setRequestHeader("Content-type", "application/json");
-      
-      request.send(JSON.stringify(Object.fromEntries(formData)));
-      e.target.reset();
-
-      request.addEventListener("load", (e) => {
-        if (request.status === 200) {
-          showResponseModal(MESSAGES.success, loading);
-        } else {
-          showResponseModal(MESSAGES.failure, loading);
-        }
-      });
+      fetch("http://localhost:4200/support/", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify(Object.fromEntries(new FormData(e.target)))
+      })
+        .then(response => {
+          if (response.ok) {
+            showResponseModal(MESSAGES.success);
+          } else {
+            showResponseModal(MESSAGES.failure);
+          }
+        })
+        .catch(e => console.log(e))
+        .finally(() => {
+          loading.remove();
+          e.target.reset();
+        });
     });
   }
 
-  function showResponseModal(message, loading) {
-    loading.remove();
+  function showResponseModal(message) {
     const prevModalDialog = document.querySelector(".modal__dialog");
     prevModalDialog.classList.add("hide");
     openModal();
