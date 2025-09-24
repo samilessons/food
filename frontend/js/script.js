@@ -176,7 +176,6 @@ window.addEventListener("DOMContentLoaded", function () {
 
   axios.get("http://localhost:9999/menu")
     .then(data => {
-      console.log(data);
       data.data.forEach(item => {
         new MenuCard(item.coverSrc, item.coverAlt, item.title, item.descr, item.price, ".menu__field .container").render();
       });
@@ -216,7 +215,6 @@ window.addEventListener("DOMContentLoaded", function () {
       // )
       axios.post("http://localhost:9999/support", data)
         .then(response => {
-          console.log(response);
           if (response.status === 201) {
             showResponseModal(MESSAGES.success);
           } else {
@@ -224,7 +222,6 @@ window.addEventListener("DOMContentLoaded", function () {
           }
         })
         .catch(e => {
-          console.log(e);
           showResponseModal(MESSAGES.failure);
         })
         .finally(() => {
@@ -262,6 +259,52 @@ window.addEventListener("DOMContentLoaded", function () {
   }
   // forms end
 
+  // slider start
+  const slides = document.querySelectorAll(".offer__slide");
+  const prevBtn = document.querySelector(".offer__slider-prev");
+  const nextBtn = document.querySelector(".offer__slider-next");
+  const current = document.querySelector("#current");
+  const total = document.querySelector("#total");
+  
+  let slideIndex = 1;
+
+  function setCurrentAndTotal(block, index) {
+    if (slides.length < 10) {
+      block.textContent = `0${index}`;
+    } else {
+      block.textContent = index;
+    }
+  }
+
+  function showSldes(n) {
+    if (n > slides.length) {
+      slideIndex = 1;
+    }
+
+    if (n < 1) {
+      slideIndex = slides.length;
+    }
+
+    slides.forEach(slide => {
+      slide.classList.add("hide");
+      slide.classList.remove("show", "fade");
+    });
+
+    slides[slideIndex - 1].classList.remove("hide");
+    slides[slideIndex - 1].classList.add("show", "fade");
+
+    setCurrentAndTotal(current, slideIndex);
+  }
+
+  function changeSlidesN(n) {
+    showSldes(slideIndex += n);
+  }
+  
+  changeSlidesN(0);
+  setCurrentAndTotal(total, slides.length);
+  prevBtn.addEventListener("click", () => changeSlidesN(-1));
+  nextBtn.addEventListener("click", () => changeSlidesN(1));
+  // slider end
 
   // global functions
   async function postData(url, data) {
@@ -286,4 +329,4 @@ window.addEventListener("DOMContentLoaded", function () {
 
     return await res.json();
   }
-}); 
+});
