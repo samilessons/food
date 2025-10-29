@@ -1,4 +1,4 @@
-function tabs() {
+export default function tabs() {
   const tabHeadersParent = document.querySelector(".tabheader__items");
   const tabHeaders = tabHeadersParent.querySelectorAll(".tabheader__item ");
   const tabContents = document.querySelectorAll(".tabcontent");
@@ -34,5 +34,3 @@ function tabs() {
     }
   });
 }
-
-module.exports = tabs;

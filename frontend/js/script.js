@@ -1,21 +1,19 @@
 "use strict";
 
+import tabs from "./modules/tabs.js";
+import modals from "./modules/modals.js";
+import timer from "./modules/timer.js";
+import calculator from "./modules/calculator.js";
+import forms from "./modules/forms.js";
+import menuCard from "./modules/menuCard.js";
+import slider from "./modules/slider.js";
+
 window.addEventListener("DOMContentLoaded", function () {
-  const tabs = require("./modules/tabs");
-  const modalsObject = require("./modules/modals");
-  const timer = require("./modules/timer");
-  const calculator = require("./modules/calculator");
-  const forms = require("./modules/forms");
-  const menuCard = require("./modules/menuCard");
-  const slider = require("./modules/slider");
-
-  const { modals, openModal, closeModal, modal, modalTimerId } = modalsObject;
-
   tabs();
   modals();
   timer();
   calculator();
-  forms(openModal, closeModal, modal, modalTimerId);
+  forms();
   menuCard();
   slider();
 });

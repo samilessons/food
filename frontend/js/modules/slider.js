@@ -1,4 +1,4 @@
-function slider() {
+export default function slider() {
   const sliderParent = document.querySelector(".offer__slider");
   const slides = document.querySelectorAll(".offer__slide");
   const prevBtn = document.querySelector(".offer__slider-prev");
@@ -158,5 +158,3 @@ function slider() {
   // nextBtn.addEventListener("click", () => changeSlidesN(1));
   // slider old version start
 }
-
-module.exports = slider;

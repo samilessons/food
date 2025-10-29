@@ -1,21 +1,21 @@
-function closeModal(modal, modalTimerId) {
+export function closeModal(modal, modalTimerId) {
   modal.classList.add("hidden");
   modal.classList.remove("show");
   document.body.style.overflowY = "auto";
   clearTimeout(modalTimerId);
 }
 
-function openModal(modal, modalTimerId) {
+export function openModal(modal, modalTimerId) {
   modal.classList.remove("hidden");
   modal.classList.add("show");
   document.body.style.overflowY = "hidden";
   clearTimeout(modalTimerId);
 }
 
-const modal = document.querySelector(".modal");
-const modalTimerId = setTimeout(openModal, 320000);
+export const modal = document.querySelector(".modal");
+export const modalTimerId = setTimeout(openModal, 320000);
 
-function modals() {
+export default function modals() {
   const openModalTriggers = document.querySelectorAll("[data-modal-open]");
 
   closeModal(modal, modalTimerId);
@@ -48,11 +48,3 @@ function modals() {
 
   window.addEventListener("scroll", showModalByScroll);
 }
-
-module.exports = {
-  modals,
-  closeModal,
-  openModal,
-  modal,
-  modalTimerId
-};

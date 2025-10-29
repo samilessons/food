@@ -1,4 +1,4 @@
-function timer() {
+export default function timer() {
   const endTime = "2025-12-31 23:59:59";
 
   function getTimeRemaining(endTime) {
@@ -49,5 +49,3 @@ function timer() {
 
   setClock(".timer", endTime);
 }
-
-module.exports = timer;

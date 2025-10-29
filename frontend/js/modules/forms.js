@@ -1,4 +1,10 @@
-function forms(openModal, closeModal, modal, modalTimerId) {
+import { openModal, closeModal, modal, modalTimerId } from "./modals.js";
+import postData from "../services/postData.js";
+import getData from "../services/getData.js";
+
+import axios from "axios";
+
+export default function forms() {
   const forms = document.querySelectorAll("form");
   forms.forEach(form => postWrapperData(form));
 
@@ -24,28 +30,26 @@ function forms(openModal, closeModal, modal, modalTimerId) {
 
       const formData = new FormData(e.target);
       const data = JSON.stringify(Object.fromEntries(formData.entries()));
-      // fetch("http://localhost:4200/support/"
-      // postData(
-      //   "http://localhost:9999/support",
-      //   data
-      // )
-      axios.post("http://localhost:9999/support", data)
-        .then(response => {
-          if (response.status === 201) {
-            showResponseModal(MESSAGES.success);
-          } else {
-            showResponseModal(MESSAGES.failure);
-          }
-        })
-        .catch(e => {
+      postData(
+        "http://localhost:9999/support",
+        data
+      )
+      .then(response => {
+        if (response.status === 201) {
+          showResponseModal(MESSAGES.success);
+        } else {
           showResponseModal(MESSAGES.failure);
-        })
-        .finally(() => {
-          loading.remove();
-          e.target.reset();
-          axios.get("http://localhost:9999/support")
-            .then(data => console.log(data));
-        });
+        }
+      })
+      .catch(e => {
+        showResponseModal(MESSAGES.failure);
+      })
+      .finally(() => {
+        loading.remove();
+        e.target.reset();
+        axios.get("http://localhost:9999/support")
+          .then(data => console.log(data));
+      });
     });
   }
 
@@ -74,5 +78,3 @@ function forms(openModal, closeModal, modal, modalTimerId) {
     }, 2500);
   }
 }
-
-module.exports = forms;

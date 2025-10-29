@@ -1,11 +1,13 @@
-async function getData(url) {
-  const res = await fetch(url);
+export default async function getData(url) {
+  try {
+    const res = await fetch(url);
 
-  if (!res.ok) {
-    throw new Error(`Не удалось получить ${url}, статус - ${res.status}`);
+    if (!res.ok) {
+      console.log(`Не удалось получить ${url}, статус - ${res.status}`);
+    }
+
+    return await res.json();
+  } catch (e) {
+    console.log(e);
   }
-
-  return await res.json();
 }
-
-module.exports = getData;

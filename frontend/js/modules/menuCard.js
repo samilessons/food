@@ -1,4 +1,6 @@
-function menuCard() {
+import getData from "../services/getData.js";
+
+export default function menuCard() {
   class MenuCard {
     constructor(coverSrc, coverAlt, title, descr, price, parentSelector) {
       this.coverSrc = coverSrc;
@@ -34,12 +36,14 @@ function menuCard() {
     }
   }
 
-  axios.get("http://localhost:9999/menu")
-    .then(data => {
-      data.data.forEach(item => {
-        new MenuCard(item.coverSrc, item.coverAlt, item.title, item.descr, item.price, ".menu__field .container").render();
-      });
-    });
-}
+  try {
+    getData("http://localhost:9999/menu")
+  } catch { }
 
-module.exports = menuCard;
+  // axios.get("http://localhost:9999/menu")
+  //   .then(data => {
+  //     data.data.forEach(item => {
+  //       new MenuCard(item.coverSrc, item.coverAlt, item.title, item.descr, item.price, ".menu__field .container").render();
+  //     });
+  //   });
+}
